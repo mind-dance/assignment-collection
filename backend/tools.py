@@ -17,13 +17,19 @@ class Tools():
     def get_path(self, file):
         return os.path.join(self.target_path, file)
     
+    def get_done(self):
+        return self.db.read_done()
+    
+    def get_miss(self):
+        return self.db.read_miss()
+    
     # 读取json设置
     def get_config(self):
         with open("backend/config.json", "r", encoding="utf-8") as f:
             config = json.load(f)
         self.template = config["template"]
         self.target_path = config["target_path"]
-        
+
     # 保存json设置
     def set_config(self):
         config = {"target_path": self.target_path,"template": self.template}
@@ -63,10 +69,8 @@ class Tools():
         s_id = self.db.read_all_s_id()
         fields = ["hw", "status"]
         for sid in s_id:
-            row = [self._make_filename(sid), 0]
-            query = self.db.make_update("submits", fields, sid)
-            self.db.cur.execute(query, row)
-        self.db.con.commit()
+            values = [self._make_filename(sid), 0, sid]
+            self.db.update_s(fields, "sid", values)
 
     # 第三步，检查作业，添加路径到数据库
     def check_hw(self):
@@ -87,7 +91,6 @@ class Tools():
                 self.db.update_s(["status", "path"], "hw", [1, path, file])
             else:
                 error_list.append(file)
-        self.db.con.commit()
         return error_list
 
     # 第四步，修正文件名

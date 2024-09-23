@@ -112,7 +112,19 @@ class Database():
         return hw
 
     # 更新学生数据
-    def update_s(self, fields:list, condition, values):
+    def update_s(self, fields:list, condition:str, values:list):
         query = self.make_update("submits", fields, condition)
         self.con.execute(query, values)
         self.con.commit()
+    # 已交
+    def read_done(self):
+        fields = ["sid", "sname"]
+        query = self.make_select("submits", fields, "status")
+        out = self.cur.execute(query, (1,)).fetchall()
+        return out
+    # 缺交
+    def read_miss(self):
+        fields = ["sid", "sname"]
+        query = self.make_select("submits", fields, "status")
+        out = self.cur.execute(query, (0,)).fetchall()
+        return out

@@ -36,11 +36,17 @@ def load_template(template):
 # 查看作业完成情况，返回done，miss，error列表
 @app.route("/api/check", method = ["GET"])
 def check():
-    return "ok"
+    error_list = t.check_hw()
+    etc = t.read_error_list(error_list)
+    out = {"done":t.get_done, "miss":t.get_miss, "etc":etc}
+    return jsonify(out)
 
 # 打开文件
 @app.route("/api/open", method = ["GET"])
-def open_file():
+def open_file(sid):
+    hw = t.db.get_s_hw(sid)
+    path = t.get_path(hw)
+    os.system(f'start {path}')  # 对于Windows系统
     return "ok"
 
 # 导出名单
