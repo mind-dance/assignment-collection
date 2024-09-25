@@ -109,8 +109,11 @@ class Database():
         query = self.make_select("submits", ["hw"], "sid")
         values = [sid]
         hw = self.con.execute(query, values).fetchone()[0]
-        return hw
-
+        if hw == None:
+            return None
+        else:
+            return hw
+    
     # 更新学生数据
     def update_s(self, fields:list, condition:str, values:list):
         query = self.make_update("submits", fields, condition)

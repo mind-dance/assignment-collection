@@ -12,9 +12,11 @@ const NavLine = (props) => {
           margin: '16px 0',
         }}
       >
-        {items.map((item) => (
-          <Breadcrumb.Item key={item.key}>{item.label}</Breadcrumb.Item>
-        ))}
+
+        <Breadcrumb items={[
+          { label: 'Home' },
+          { label: 'Page 1' }
+        ]} />
       </Breadcrumb>
     </>
   )

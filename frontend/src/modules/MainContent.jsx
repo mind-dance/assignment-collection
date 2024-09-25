@@ -1,24 +1,18 @@
-import { Layout, Menu } from "antd";
-import NavSider from "./NavSider";
-const { Sider, Content } = Layout;
+import { useState, useEffect } from "react";
+import  axios  from "axios";
+import { Layout, Space, Flex, theme } from "antd"
+import NavSider from "./NavSider"
+import List from "./List.jsx"
+const { Content } = Layout;
 
-const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map((icon, index) => {
-  const key = String(index + 1);
-  return {
-    key: `sub${key}`,
-    icon: React.createElement(icon),
-    label: `subnav ${key}`,
-    children: new Array(4).fill(null).map((_, j) => {
-      const subKey = index * 4 + j + 1;
-      return {
-        key: subKey,
-        label: `option${subKey}`,
-      };
-    }),
-  };
-});
+axios.defaults.baseURL = 'http://localhost:5000';
 
 const MainContent = () => {
+  const {
+    token: { colorBgContainer, borderRadiusLG },
+  } = theme.useToken();
+
+
   return (
     <>
       <Layout
@@ -28,29 +22,16 @@ const MainContent = () => {
           borderRadius: borderRadiusLG,
         }}
       >
-        <Sider
-          style={{
-            background: colorBgContainer,
-          }}
-          width={200}
-        >
-          <Menu
-            mode="inline"
-            defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
-            style={{
-              height: '100%',
-            }}
-            items={items2}
-          />
-        </Sider>
+        <NavSider />
         <Content
           style={{
             padding: '0 24px',
             minHeight: 280,
           }}
         >
-          Content
+          <Flex gap="large" >
+            <List title="文件列表"/>
+          </Flex>
         </Content>
       </Layout>
     </>

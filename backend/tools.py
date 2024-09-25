@@ -4,12 +4,13 @@ import json
 from database import Database
 
 class Tools():
-    def __init__(self, db = "database.db"):
+    def __init__(self, db = "database.sqlite"):
         self.root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         self.same_path = os.path.dirname(os.path.abspath(__file__))
         self.target_path = ""
         self.template = "计科-${sname}-${sid}-实验报告.docx"
         self.db = Database(db)
+        self.get_config()
 
     def get_root(self):
         return self.root_path
