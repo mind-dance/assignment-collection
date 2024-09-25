@@ -25,7 +25,7 @@ class Tools():
     
     # 读取json设置
     def get_config(self):
-        with open("backend/config.json", "r", encoding="utf-8") as f:
+        with open("config.json", "r", encoding="utf-8") as f:
             config = json.load(f)
         self.template = config["template"]
         self.target_path = config["target_path"]
@@ -33,7 +33,7 @@ class Tools():
     # 保存json设置
     def set_config(self):
         config = {"target_path": self.target_path,"template": self.template}
-        with open("backend/config.json", "w", encoding="utf-8") as f:
+        with open("config.json", "w", encoding="utf-8") as f:
             json.dump(config, f, sort_keys=True, indent=4)
         
     def _make_filename(self, sid):
@@ -51,7 +51,7 @@ class Tools():
         os.rename(file, filename)
 
     # 第一步，读取文件
-    def read_filenames(self,abs_path):
+    def read_filenames(self, abs_path):
         '''获取目标目录的所有文件名'''
         filenames = []
         # 列出所有文件与子文件夹

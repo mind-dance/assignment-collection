@@ -1,6 +1,6 @@
 import os
 import json
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from tools import Tools
 
@@ -15,26 +15,36 @@ if os.path.exists("config.json"):
     t.get_config()
 
 # 欢迎
-@app.route('/api/welcome', methods = ['GET'])
+@app.route('/api/welcome/', methods = ['GET'])
 def welcome():
     return jsonify({"message": "道爷我成啦！"})
 
 # 添加目标路径
-@app.route("/api/target", method = ["PUT"])
-def load_filenames(path):
-    '''输入目标文件夹'''
-    t.target_path = path
-    return "ok"
+@app.route("/api/target/", methods = ['GET', "POST"])
+def load_target():
+    if request.method == 'POST':
+        t.target_path = request.args.get("path")
+        t.set_config()
+        return "ok", 200
+    else:
+        out = t.target_path
+        return out, 200
+
+# 列出目标文件夹下的所有文件名
+@app.route("/api/read-filenames/", methods = ["get"])
+def read_filenames():
+    out = t.read_filenames(t.target_path)
+    return jsonify(out)
 
 # 添加模板
-@app.route("/api/template", method = ["PUT"])
+@app.route("/api/template", methods = ["PUT"])
 def load_template(template):
     '''输入模板'''
     t.template = template
     return "ok"
 
 # 查看作业完成情况，返回done，miss，error列表
-@app.route("/api/check", method = ["GET"])
+@app.route("/api/check", methods = ["GET"])
 def check():
     error_list = t.check_hw()
     etc = t.read_error_list(error_list)
@@ -42,7 +52,7 @@ def check():
     return jsonify(out)
 
 # 打开文件
-@app.route("/api/open", method = ["GET"])
+@app.route("/api/open", methods = ["GET"])
 def open_file(sid):
     hw = t.db.get_s_hw(sid)
     path = t.get_path(hw)
@@ -50,6 +60,6 @@ def open_file(sid):
     return "ok"
 
 # 导出名单
-@app.route("/api/export", method = ["GET"])
+@app.route("/api/export", methods = ["GET"])
 def export():
     return "ok"
