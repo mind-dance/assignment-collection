@@ -1,21 +1,19 @@
-import React from "react";
-import { Layout } from "antd";
-// import { axios } from "axios";
-
-// function welcome () {
-
-//     axios.get('localhost:5000/api/welcome').then((meg) => {
-//         return <p>{meg.message}</p>
-//     })
-// }
-
-const Homework=()=>{
+import React from "react"
+import NavBar from "../modules/NavBar.jsx"
+import NavLine from '../modules/NavLine.jsx'
+import MainContent from '../modules/MainContent.jsx'
+import NavSider from "../modules/NavSider.jsx"
+const Homework = () => {
     return(
-        <div>
-        <p>hello, world!</p>
-        </div>
+        <>
+        <NavBar />
+        {/* 展示所有文件，已提交名单，未提交名单。 */}
+        {/* <NavLine gps={["项目","作业7274"]}/> */}
+        {/* <NavSider /> */}
+        {/* <MainContent /> */}
+        <p>This is cs50!</p>
+        </>
     )
 }
 
-
-export default Homework;
+export default Homework

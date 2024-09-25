@@ -1,23 +1,20 @@
 import { useState } from 'react'
-import React from 'react';
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import Homework from './pages/Homework';
-import { Button } from 'antd';
+import Homework from './pages/Homework.jsx'
+import Projects from './pages/Projects.jsx'
+
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-      <div className="App">
-        <Button type="primary">Button</Button>
-      </div>
+    {/* <Homework /> */}
+    <Projects />
     </>
   )
 }
 
 export default App
-
-
