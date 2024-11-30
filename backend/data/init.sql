@@ -13,6 +13,5 @@ CREATE TABLE "submits" (
 	"sid" TEXT NOT NULL,
 	"hw" TEXT NULL,
 	"status" INTEGER NOT NULL DEFAULT 0,
-	"path" TEXT NULL,
 	FOREIGN KEY ("sid") REFERENCES "students" ("sid") ON UPDATE CASCADE ON DELETE CASCADE
 );
