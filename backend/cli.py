@@ -58,7 +58,10 @@ db = utils.Database()
 f_init()
 f_create()
 warn = f_check()
-print(warn)
+if not warn:
+    print("\nall is well.\n")
+else:
+    print(warn)
 # while True:
 #     menu = '''
 # 生成文件名：create
