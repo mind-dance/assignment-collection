@@ -2,7 +2,29 @@ import unittest
 from backend.cli import *
 class TestCli(unittest.TestCase):
     def setUp(self):
-        pass
+        # 指定目录
+        directory = 'tests/actual'
+        # 删除目录下的所有文件(如果存在)
+        if os.path.exists(directory):
+            for filename in os.listdir(directory):
+                file_path = os.path.join(directory, filename)
+                if os.path.isfile(file_path):
+                    os.remove(file_path)
+        
+        # 创建文件夹（如果不存在）
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
+        # 文件名列表
+        filenames = ["20241111-王伊诺-清华拳.mp4", "20241112-薛维旭-清华拳.mp4", "20241113-沙袋-清华拳.mp4"]
+        
+        # 批量创建文件
+        for filename in filenames:
+            file_path = os.path.join(directory, filename)
+            with open(file_path, 'w', encoding='utf-8') as f:
+                f.write('这是一个输出文件。\n')
+
+
     def tearDown(self):
         pass
 
@@ -30,31 +52,31 @@ class TestCli(unittest.TestCase):
         sdict = {"class": "计科240", "sid": "20241112", "sname": "薛维旭"}
         template = "${class}-${sid}-${sname}-清华拳实践课.mp4"
         expected = "计科240-20241112-薛维旭-清华拳实践课.mp4"
-        out = generate_target_filename(sdict, template)
+        out = utils.generate_target_filename(sdict, template)
         self.assertEqual(expected, out)
 
     def test_search_sid_in_filename(self):
         filename = "计科240-20241112-薛维旭-清华拳实践课.mp4"
         expected = "20241112"
-        out = search_sid_in_filename(filename, len = 8)
+        out = utils.search_sid_in_filename(filename, len = 8)
         self.assertEqual(expected, out)
     
     # @unittest.expectedFailure
     def test_search_sid_in_filename_fail(self):
         filename = "计科240-20241112-薛维旭-清华拳实践课.mp4"
         with self.assertRaises(ValueError):
-            search_sid_in_filename(filename, len = 12)
+            utils.search_sid_in_filename(filename, len = 12)
 
     def test_true_search_actual_filename_list(self):
         target_filename = "计科240-20241112-薛维旭-清华拳实践课.mp4"
         actual_filename_list = ["计科240-20241112-薛维旭-清华拳实践课.mp4", "计科240-24114514-田所浩二-野兽先辈.mp4"]
         expected = True
-        out = search_actual_filename_list(target_filename, actual_filename_list)
+        out = utils.search_actual_filename_list(target_filename, actual_filename_list)
         self.assertEqual(expected, out)
 
     def test_false_search_actual_filename_list(self):
         target_filename = "计科240-20241112-薛维旭-清华拳实践课.mp4"
         actual_filename_list = ["计科240-20241111-王伊诺-note.ms共享编辑实践课.mp4", "计科240-24114514-辅导员-沙袋实践课.mp4"]
         expected = False
-        out = search_actual_filename_list(target_filename, actual_filename_list)
+        out = utils.search_actual_filename_list(target_filename, actual_filename_list)
         self.assertEqual(expected, out)

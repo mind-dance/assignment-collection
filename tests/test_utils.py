@@ -1,7 +1,7 @@
 import unittest
 import csv
 import os
-from backend.db import *
+from backend.utils import *
 
 
 class TestDb(unittest.TestCase):
