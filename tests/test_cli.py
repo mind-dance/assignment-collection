@@ -1,5 +1,7 @@
 import unittest
-from backend.cli import *
+import os
+from backend import utils
+# from backend.utils import *
 class TestCli(unittest.TestCase):
     def setUp(self):
         # 指定目录

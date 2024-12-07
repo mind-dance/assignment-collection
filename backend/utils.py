@@ -59,14 +59,24 @@ class Database():
         self.con = sqlite3.connect(db)
         self.cur = self.con.cursor()
 
+    def read_all_sid(self):
+        '''读取所有学号'''
+        self.cur.execute("SELECT sid FROM students")
+        sids = self.cur.fetchall()
+        return [sid[0] for sid in sids]
     
+    def check_file(self, actual):
+        '''检查文件是否在数据库中存在'''
+        self.cur.execute("SELECT hw FROM submits WHERE hw = ?", (actual,))
+        result = self.cur.fetchone()
+        return result is not None
 
     def update_status_by_filename(self, filename):
         '''按文件名，更新数据库中的状态'''
         self.cur.execute("UPDATE submits SET status = 1 WHERE hw = ?", (filename,))
         self.con.commit()
 
-    def read_sname_by_sid(self,sid):
+    def read_sname_by_sid(self, sid):
         '''按学号读取姓名'''
         self.cur.execute("SELECT sname FROM students WHERE sid = ?", (sid,))
         sname = self.cur.fetchone()
@@ -98,10 +108,9 @@ class Database():
         '''给定模板和学生id，生成文件名并插入数据库'''
         sdict = {"sid": sid, "sname": self.read_sname_by_sid(sid)}
         hw = generate_target_filename(sdict, template)
-        print(hw)
+        # print(hw)
         self.cur.execute("INSERT INTO submits (sid, hw) VALUES (?, ?)", (sid, hw))
         self.con.commit()
-
 
         # 构建查询语句
     def import_csv(self, csvfile, table):
@@ -114,7 +123,7 @@ class Database():
                 reader = csv.reader(f)
                 # 读取字段
                 fields = next(reader)
-                print(fields)
+                # print(fields)
                 query = self.make_insert(table, fields)
                 for row in reader:
                     # 构建查询语句并执行
