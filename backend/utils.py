@@ -2,7 +2,6 @@ import sqlite3
 import os
 import re
 import csv
-import utils
 
 def not_exist():
         # 删除demo.db文件

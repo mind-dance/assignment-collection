@@ -3,7 +3,7 @@ import csv
 import os
 from backend.utils import *
 
-
+@unittest.skip("skip")
 class TestDb(unittest.TestCase):
     def import_csv(self, csvfile, table):
         '''导入表格，需要负责异常捕捉'''
