@@ -48,16 +48,25 @@ def search_sid_in_filename(filename, len=12):
         raise ValueError("未找到学号")
 
 
-def rename_file(path, newname):
-    os.chdir(path)
-    os.rename(path, newname)
 
 
 class Database():
 
-    def __init__(self, db = "demo.db"):
+    def __init__(self, db="demo.db"):
         self.con = sqlite3.connect(db)
         self.cur = self.con.cursor()
+    
+    def dash(self):
+        '''统计作业提交情况'''
+        submit_list = []
+        empty_list = []
+        submit = self.cur.execute("SELECT submits.sid, students.sname, submits.status FROM submits JOIN students ON students.sid = submits.sid WHERE submits.status = 1").fetchall()
+        for row in submit:
+            submit_list.append(row)
+        empty = self.cur.execute("SELECT submits.sid, students.sname, submits.status FROM submits JOIN students ON students.sid = submits.sid WHERE submits.status = 0").fetchall()
+        for row in empty:
+            empty_list.append(row)
+        return submit_list, empty_list
 
     def read_all_sid(self):
         '''读取所有学号'''
@@ -87,9 +96,7 @@ class Database():
 
     def read_hw_by_sid(self, sid):
         '''按学号读取文件名'''
-        
-        hw =  self.cur.execute("SELECT hw FROM submits WHERE sid = ?", (sid,))
-        hw = self.cur.fetchone()
+        hw =  self.cur.execute("SELECT hw FROM submits WHERE sid = ?", (sid,)).fetchone()
         if hw:
             return hw[0]
         else:
@@ -108,11 +115,9 @@ class Database():
         '''给定模板和学生id，生成文件名并插入数据库'''
         sdict = {"sid": sid, "sname": self.read_sname_by_sid(sid)}
         hw = generate_target_filename(sdict, template)
-        # print(hw)
         self.cur.execute("INSERT INTO submits (sid, hw) VALUES (?, ?)", (sid, hw))
         self.con.commit()
 
-        # 构建查询语句
     def import_csv(self, csvfile, table):
         '''导入表格，需要负责异常捕捉'''
         # 清空表格
